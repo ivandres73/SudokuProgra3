@@ -49,9 +49,6 @@ void MainWindow::pintar()
 
 void MainWindow::on_new_game_clicked()//funcion del boton new game
 {
-    cout << "voy a dormir..." << endl;
-    sleep(1);
-    cout << "woke up!" << endl;
     clean();
     switch (juego)
     {
@@ -203,7 +200,7 @@ void MainWindow::checkColumna(int columna, int valor, bool igual)
     }
 }
 
-void MainWindow::checkCuadra(int cuadra, int valor)
+void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
 {
     int fila, col;
     switch (cuadra)
@@ -249,9 +246,16 @@ void MainWindow::checkCuadra(int cuadra, int valor)
     {
         for (int v=0; v < 3; v++)
         {
-            if (valor == grid[fila + i][col + i]->text().toInt())
+            if (valor == grid[fila + i][col + v]->text().toInt())
             {
-                grid[fila+i][col+i]->setStyleSheet("QLineEdit { background: rgb(255, 0, 0); }");
+                if (igual)
+                {
+                    grid[fila+i][col+v]->setStyleSheet("QLineEdit { background: rgb(0, 255, 255); }");
+                }
+                else
+                {
+                    igual = true;
+                }
             }
         }
     }
@@ -261,14 +265,40 @@ void MainWindow::on_Evaluate_clicked()//Funcion del boton evaluar
 {
     colorClean();
     int valor;
+    int cuadra;
+    for (int i=0; i < 9; i++)
+    {
+        cuadra = 0;
+        if (i >= 3 && i <= 5)
+            cuadra = 3;
+        else if (i > 5)
+            cuadra = 6;
+        for (int v=0; v < 9; v++)
+        {
+            if (v == 3)
+                cuadra += 1;
+            if (v == 6)
+                cuadra += 1;
+            cout << "cuadra: " << cuadra << endl;
+            valor = grid[i][v]->text().toInt();
+            if (valor == 0)
+                continue;
+            checkFila(i, valor, false);
+            checkColumna(v, valor, false);
+            checkCuadra(cuadra, valor, false);
+        }
+    }
+}
+
+void MainWindow::on_Solve_clicked()
+{
     for (int i=0; i < 9; i++)
     {
         for (int v=0; v < 9; v++)
         {
-            valor = grid[i][v]->text().toInt();
-            checkFila(i, valor, false);
-            checkColumna(i, valor, false);
-            //checkCuadra(i, v);
+            cout << "voy a dormir..." << endl;
+            sleep(1);
+            cout << "woke up!" << endl;
         }
     }
 }
