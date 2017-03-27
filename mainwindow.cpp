@@ -13,7 +13,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::ejecutar()
+void MainWindow::ejecutar()//basicamente aqui se crea el arreglo
 {
     for (int i=0; i < 9; i++)
     {
@@ -37,7 +37,7 @@ void MainWindow::pintar()
         for (int v=0; v < 9; v++)
         {
             if (v%3 == 0)
-                posx+= 20;
+                posx+= 20;// Cada 3 QLineEdits los separa mas, para que se miren 9 cuadras 3x3
             grid[i][v]->move(posx, posy);
             grid[i][v]->show();
             posx += 100;
@@ -53,13 +53,13 @@ void MainWindow::on_new_game_clicked()//funcion del boton new game
     switch (juego)
     {
     case 0:
-        example1();
+        example1();//Este es el primer juego, es el unico que tiene por ahora
         break;
     case 1:
-        example2();
+        example2();///vacio
         break;
     case 2:
-        example3();
+        example3();///vacio
         break;
     }
     juego++;
@@ -68,7 +68,7 @@ void MainWindow::on_new_game_clicked()//funcion del boton new game
     cout << juego << endl;
 }
 
-void MainWindow::example1()
+void MainWindow::example1()//Esos numeros con esas posiciones las saque de internet
 {
     for (int i=0; i < 9; i++)
     {
@@ -147,8 +147,8 @@ void MainWindow::clean()
     {
         for (int v=0; v < 9; v++)
         {
-            grid[i][v]->setText("");
-            grid[i][v]->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");
+            grid[i][v]->setText("");//vacio los QLine
+            grid[i][v]->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");//Pinta los QLineEdits en blanco
         }
     }
 }
@@ -159,7 +159,7 @@ void MainWindow::colorClean()
     {
         for (int v=0; v < 9; v++)
         {
-            grid[i][v]->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");
+            grid[i][v]->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");//Solo pinta de blanco si vaciar los numeros
         }
     }
 }
@@ -169,12 +169,12 @@ void MainWindow::checkFila(int fila, int valor, bool igual)
     int temp;
     for (int i=0; i < 9; i++)
     {
-        temp = grid[fila][i]->text().toInt();
-        if (temp == 0)
+        temp = grid[fila][i]->text().toInt();//Aqui agarra el valor del QLineEdit
+        if (temp == 0)//Esto es porque si el QLineEdit esta vacio me agarra el 0, pero en el juego sudoku nunca se usa el 0
             continue;
         if (valor == temp)
         {
-            if (igual)
+            if (igual)//Este buleano es para que pinte si encuentra el mismo numero 2 o mas veces.
                 grid[fila][i]->setStyleSheet("QLineEdit { background: rgb(255, 0, 0); }");
             else
                 igual = true;
@@ -182,7 +182,7 @@ void MainWindow::checkFila(int fila, int valor, bool igual)
     }
 }
 
-void MainWindow::checkColumna(int columna, int valor, bool igual)
+void MainWindow::checkColumna(int columna, int valor, bool igual)//Misma logica que el checkColumna basicamente
 {
     int temp;
     for (int i=0; i < 9; i++)
@@ -203,7 +203,7 @@ void MainWindow::checkColumna(int columna, int valor, bool igual)
 void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
 {
     int fila, col;
-    switch (cuadra)
+    switch (cuadra)//Este pijasal de cases es para ser precisos en la cuadra en que este, son 9 cuadras 3x3
     {
     case 0:
         fila = 0;
@@ -250,7 +250,7 @@ void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
             {
                 if (igual)
                 {
-                    grid[fila+i][col+v]->setStyleSheet("QLineEdit { background: rgb(0, 255, 255); }");
+                    grid[fila+i][col+v]->setStyleSheet("QLineEdit { background: rgb(0, 255, 255); }");//Lo pintat de AZUL
                 }
                 else
                 {
@@ -290,7 +290,7 @@ void MainWindow::on_Evaluate_clicked()//Funcion del boton evaluar
     }
 }
 
-void MainWindow::on_Solve_clicked()
+void MainWindow::on_Solve_clicked()//Falta terminar este metodo
 {
     for (int i=0; i < 9; i++)
     {
