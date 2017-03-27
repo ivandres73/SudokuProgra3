@@ -6,7 +6,7 @@
 using namespace std;
 
 
-class SudokuLabels
+class SudokuLabels //Esta clase no sirve !!, nunca la utilizo ! !
 {
 public:
     SudokuLabels(QTextEdit* lab[9][9]);
