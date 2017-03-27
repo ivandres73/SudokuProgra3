@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QTextEdit>
 #include <QLineEdit>
 #include <QString>
-#include <unistd.h>
+#include <string>
+#include <unistd.h>//Libreria que tiene una funcion que congela el tiempo
 
 #include <QMainWindow>
 
@@ -22,7 +22,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    ///SudokuLabels* suko; Nunca lo utilizo
     QLineEdit* grid[9][9];
     void ejecutar();// Esta funcion crea el arreglo bidimensional de los QLineEdit (osea los cuadritos)
     void pintar();//Esta funcion es el que los pinta en la pantalla (tipo .setVisible)
@@ -31,10 +30,11 @@ public:
     void example3();/**/
     void clean();//Esta funcion quita los numeros de todos los cuadritos
     void colorClean();//Esta funcion quita los colores de los cuadritos (osea los vuelve a pintar blancos)
-    void checkFila(int, int, bool);// Si se repite en la misma fila, pinta ROJO
-    void checkColumna(int, int, bool);// Si se repite en la misma columna, pinta ROJO
-    void checkCuadra(int, int, bool);// Si se repite en la misma fila, pinta AZUL
+    short checkFila(int, int, bool);// Si se repite en la misma fila, pinta ROJO
+    short checkColumna(int, int, bool);// Si se repite en la misma columna, pinta ROJO
+    short checkCuadra(int, int, bool);// Si se repite en la misma fila, pinta AZUL
     int juego = 0;
+    QString toString(int);
 
 private slots:
     void on_new_game_clicked();//boton nuevo juego

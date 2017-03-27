@@ -21,9 +21,9 @@ void MainWindow::ejecutar()//basicamente aqui se crea el arreglo
         {
             grid[i][v] = new QLineEdit("caja" + i + v, this);
             grid[i][v]->setText("");
+            grid[i][v]->setValidator(new QIntValidator(1, 9, this));
         }
     }
-    ///suko = new SudokuLabels(grid);
 }
 
 void MainWindow::pintar()
@@ -65,7 +65,6 @@ void MainWindow::on_new_game_clicked()//funcion del boton new game
     juego++;
     if (juego > 2)
         juego = 0;
-    cout << juego << endl;
 }
 
 void MainWindow::example1()//Esos numeros con esas posiciones las saque de internet
@@ -164,8 +163,9 @@ void MainWindow::colorClean()
     }
 }
 
-void MainWindow::checkFila(int fila, int valor, bool igual)
+short MainWindow::checkFila(int fila, int valor, bool igual)
 {
+    short repetidos = 0;
     int temp;
     for (int i=0; i < 9; i++)
     {
@@ -175,15 +175,20 @@ void MainWindow::checkFila(int fila, int valor, bool igual)
         if (valor == temp)
         {
             if (igual)//Este buleano es para que pinte si encuentra el mismo numero 2 o mas veces.
+            {
                 grid[fila][i]->setStyleSheet("QLineEdit { background: rgb(255, 0, 0); }");
+                repetidos += 1;
+            }
             else
                 igual = true;
         }
     }
+    return repetidos;
 }
 
-void MainWindow::checkColumna(int columna, int valor, bool igual)//Misma logica que el checkColumna basicamente
+short MainWindow::checkColumna(int columna, int valor, bool igual)//Misma logica que el checkColumna basicamente
 {
+    short repetidos = 0;
     int temp;
     for (int i=0; i < 9; i++)
     {
@@ -193,15 +198,20 @@ void MainWindow::checkColumna(int columna, int valor, bool igual)//Misma logica 
         if (valor == temp)
         {
             if (igual)
+            {
                 grid[i][columna]->setStyleSheet("QLineEdit { background: rgb(255, 0, 0); }");
+                repetidos += 1;
+            }
             else
                 igual = true;
         }
     }
+    return repetidos;
 }
 
-void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
+short MainWindow::checkCuadra(int cuadra, int valor, bool igual)
 {
+    short repetidos;
     int fila, col;
     switch (cuadra)//Este pijasal de cases es para ser precisos en la cuadra en que este, son 9 cuadras 3x3
     {
@@ -251,6 +261,7 @@ void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
                 if (igual)
                 {
                     grid[fila+i][col+v]->setStyleSheet("QLineEdit { background: rgb(0, 255, 255); }");//Lo pintat de AZUL
+                    repetidos += 1;
                 }
                 else
                 {
@@ -259,6 +270,7 @@ void MainWindow::checkCuadra(int cuadra, int valor, bool igual)
             }
         }
     }
+    return repetidos;
 }
 
 void MainWindow::on_Evaluate_clicked()//Funcion del boton evaluar
@@ -279,7 +291,6 @@ void MainWindow::on_Evaluate_clicked()//Funcion del boton evaluar
                 cuadra += 1;
             if (v == 6)
                 cuadra += 1;
-            cout << "cuadra: " << cuadra << endl;
             valor = grid[i][v]->text().toInt();
             if (valor == 0)
                 continue;
@@ -292,13 +303,62 @@ void MainWindow::on_Evaluate_clicked()//Funcion del boton evaluar
 
 void MainWindow::on_Solve_clicked()//Falta terminar este metodo
 {
+    int cuadra;
+    int valor = 0;
     for (int i=0; i < 9; i++)
     {
+        cuadra = 0;
+        if (i >= 3 && i <= 5)
+            cuadra = 3;
+        else if (i > 5)
+            cuadra = 6;
         for (int v=0; v < 9; v++)
         {
-            cout << "voy a dormir..." << endl;
-            sleep(1);
-            cout << "woke up!" << endl;
+            if (v == 3)
+                cuadra += 1;
+            if (v == 6)
+                cuadra += 1;
+            if (grid[i][v]->text() != "")
+                continue;
+            for (int aux = 1; aux < 10; aux++)
+            {
+                valor++;
+                if (valor == 10)
+                    valor = 1;
+                grid[i][v]->setText(toString(valor));
+                if (checkFila(i, valor, false) == 0)
+                {
+                    if (checkColumna(v, valor, false) == 0)
+                    {
+                        if (checkCuadra(cuadra, valor, false) == 0)
+                        {
+                            colorClean();
+                            cout << v << endl;
+                            break;
+                            //sleep(2);
+                        }
+                    }
+                }
+                grid[i][v]->setText("");
+            }
         }
     }
 }
+
+QString MainWindow::toString(int number)
+{
+    if (number == 0)
+        return "0";
+    if(number < 0)
+        return "-"+toString(-number);
+    QString temp="";
+    QString returnvalue="";
+    while (number>0)
+    {
+        temp+=number%10+48;
+        number/=10;
+    }
+    for (int i=0;i<(int)temp.length();i++)
+        returnvalue+=temp[temp.length()-i-1];
+    return returnvalue;
+}//cortesia de ahmed
