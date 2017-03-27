@@ -33,13 +33,15 @@ public:
     void colorClean();
     void checkFila(int, int, bool);
     void checkColumna(int, int, bool);
-    void checkCuadra(int, int);
+    void checkCuadra(int, int, bool);
     int juego = 0;
 
 private slots:
     void on_new_game_clicked();
 
     void on_Evaluate_clicked();
+
+    void on_Solve_clicked();
 
 private:
     Ui::MainWindow *ui;
