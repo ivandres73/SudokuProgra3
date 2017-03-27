@@ -307,7 +307,6 @@ void MainWindow::on_Solve_clicked()//Falta terminar este metodo
     int valor = 0;
     for (int i=0; i < 9; i++)
     {
-        //valor = 0;
         cuadra = 0;
         if (i >= 3 && i <= 5)
             cuadra = 3;
